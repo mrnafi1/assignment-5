@@ -79,7 +79,10 @@ const displayIssues = (issues) => {
                 <p><i class="fa-solid fa-calendar mr-1"></i> <strong>Created:</strong> ${issue.CreatedAt || issue.createdAt || 'N/A'}</p>
             </div>
         `;
-        
+        card.addEventListener('click', () => {
+            const issueId = issue.id || issue._id; 
+            fetchSingleIssue(issueId);
+        });
         issuesContainer.appendChild(card);
     });
 
@@ -168,4 +171,71 @@ searchBtn.addEventListener('click', async () => {
         loadingSpinner.classList.add('hidden');
     }
 });
+
+
+const fetchSingleIssue = async (id) => {
+    try {
+        const response = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`);
+        const data = await response.json();
+        
+        const issueDetails = data.data || data;
+
+        
+        const currentStatus = issueDetails.status ? issueDetails.status.toLowerCase() : '';
+        const borderClass = currentStatus === 'open' ? 'border-green-400' : 'border-purple-400';
+        const statusBadgeClass = currentStatus === 'open' ? 'bg-green-100 text-green-700' : 'bg-purple-100 text-purple-700';
+        
+        const currentPriority = issueDetails.priority ? issueDetails.priority.toLowerCase() : '';
+        const priorityBadgeClass = currentPriority === 'high' ? 'bg-red-100 text-red-500' : 
+                                   (currentPriority === 'medium' ? 'bg-yellow-100 text-yellow-600' : 'bg-gray-100 text-gray-500');
+
+        
+        const modalBox = document.querySelector('#issue-modal .modal-box');
+        
+        modalBox.innerHTML = `
+            <div class="border-2 border-dashed ${borderClass} rounded-lg p-6 relative bg-white">
+                
+                <h3 class="font-bold text-xl text-gray-800 mb-3 pr-10">${issueDetails.title || 'No Title'}</h3>
+                
+                <div class="flex flex-wrap items-center gap-2 text-xs text-gray-500 mb-4 font-medium">
+                    <span class="px-2 py-1 rounded font-bold ${statusBadgeClass} capitalize">${issueDetails.status || 'Unknown'}</span>
+                    <span>•</span>
+                    <span>Opened by ${issueDetails.author || 'Unknown'}</span>
+                    <span>•</span>
+                    <span>${issueDetails.CreatedAt || issueDetails.createdAt || 'N/A'}</span>
+                </div>
+
+                <div class="flex gap-2 mb-5 text-xs font-bold uppercase tracking-wider">
+                    <span class="px-2 py-1 rounded bg-red-100 text-red-500"><i class="fa-solid fa-bug mr-1"></i> ${issueDetails.label || 'Bug'}</span>
+                </div>
+
+                <p class="text-sm text-gray-600 mb-8 leading-relaxed">${issueDetails.description || 'No description available for this issue.'}</p>
+
+                <div class="flex justify-between items-center text-sm mb-4">
+                    <div>
+                        <p class="text-gray-400 mb-1 font-medium">Assignee:</p>
+                        <p class="font-bold text-gray-800">${issueDetails.author || 'Unassigned'}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-400 mb-1 font-medium text-right">Priority:</p>
+                        <span class="px-3 py-1 rounded font-bold text-xs ${priorityBadgeClass} uppercase inline-block">${issueDetails.priority || 'Normal'}</span>
+                    </div>
+                </div>
+
+                <div class="modal-action mt-6 flex justify-end">
+                    <form method="dialog">
+                        <button class="btn bg-indigo-600 hover:bg-indigo-700 text-white border-none px-6">Close</button>
+                    </form>
+                </div>
+            </div>
+        `;
+
+        
+        document.getElementById('issue-modal').showModal();
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 fetchAllIssues();
