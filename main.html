@@ -1,2 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Issues Tracker - Dashboard</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+</head>
+<body class="bg-gray-50 min-h-screen font-[Geist]">
 
+    <nav class="navbar bg-white shadow-sm px-4 md:px-10 py-3 border-b border-gray-200 flex justify-between">
+        <div class="flex items-center gap-3">
+            <img src="assets/github-logo.png" alt="Logo" class="w-8">
+            <span class="text-xl font-bold text-gray-800 hidden sm:block">GitHub Issues Tracker</span>
+        </div>
+        
+        <div class="flex items-center gap-2">
+            <input type="text" id="search-input" placeholder="Search issues..." class="input input-bordered input-sm md:input-md w-full max-w-xs focus:outline-none focus:border-indigo-600" />
+            <button id="search-btn" class="btn btn-sm md:btn-md bg-indigo-600 hover:bg-indigo-700 text-white border-none">Search</button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div class="flex justify-center sm:justify-start mb-6" id="tabs-container">
+            <div class="bg-gray-200 p-1 rounded-lg inline-flex gap-1">
+                <button class="tab-btn px-6 py-2 rounded-md bg-indigo-600 text-white font-semibold shadow" data-category="all">All</button>
+                <button class="tab-btn px-6 py-2 rounded-md text-gray-600 font-medium hover:bg-gray-300 transition" data-category="open">Open</button>
+                <button class="tab-btn px-6 py-2 rounded-md text-gray-600 font-medium hover:bg-gray-300 transition" data-category="closed">Closed</button>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg border border-gray-200 mb-6 shadow-sm">
+            <div class="flex items-center gap-2 text-gray-700 font-bold mb-2 sm:mb-0">
+                <i class="fa-solid fa-circle text-indigo-500 text-xs"></i>
+                <span id="total-issues-count" class="text-lg">0</span> Issues
+            </div>
+            
+            <div class="flex gap-6 text-sm font-medium">
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="fa-solid fa-circle text-green-500 text-xs"></i> <span id="open-count">0</span> Open
+                </div>
+                <div class="flex items-center gap-2 text-gray-600">
+                    <i class="fa-solid fa-circle text-purple-500 text-xs"></i> <span id="closed-count">0</span> Closed
+                </div>
+            </div>
+        </div>
+
+        <div id="loading-spinner" class="hidden flex justify-center items-center py-20">
+            <span class="loading loading-spinner loading-lg text-indigo-600"></span>
+        </div>
+
+        <div id="issues-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            </div>
+
+    </main>
+
+    <dialog id="issue-modal" class="modal">
+        <div class="modal-box w-11/12 max-w-3xl">
+            <h3 class="font-bold text-xl mb-2" id="modal-title">Issue Title</h3>
+            <p class="py-2 text-gray-600" id="modal-description">Issue details will load here...</p>
+            <div class="modal-action">
+                <form method="dialog">
+                    <button class="btn bg-gray-200 text-gray-800 hover:bg-gray-300 border-none">Close</button>
+                </form>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="main.js"></script>
+</body>
+</html>
     
