@@ -13,4 +13,8 @@ It's just a shorter, cleaner, and more modern way to write standard JavaScript f
 5. What are template literals?
 Template literals let us use backticks (`) instead of regular quotes to create strings. They make our lives so much easier because we can write multi-line strings naturally and inject variables directly inside them using ${} without messy plus (+) signs.
 
+4. What is an arrow function?
+It's just a shorter, cleaner, and more modern way to write standard JavaScript functions using =>. Besides saving time and looking nice, the best part is that it doesn't create its own this context, which prevents a lot of common bugs in callbacks.
 
+5. What are template literals?
+Template literals let us use backticks (`) instead of regular quotes to create strings. They make our lives so much easier because we can write multi-line strings naturally and inject variables directly inside them using ${} without messy plus (+) signs.
