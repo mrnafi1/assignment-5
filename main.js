@@ -1,7 +1,8 @@
 
 let allFetchedIssues = []; 
 
-
+const searchInput = document.getElementById ('search-input');
+const searchBtn = document.getElementById('search-btn');
 const issuesContainer = document.getElementById('issues-container');
 const loadingSpinner = document.getElementById('loading-spinner');
 const totalIssuesCount = document.getElementById('total-issues-count');
@@ -116,4 +117,55 @@ tabButtons.forEach(button => {
 });
 
 
+searchBtn.addEventListener('click', async () => {
+    
+    const searchText = searchInput.value.trim();
+
+    
+    if (searchText === '') {
+        alert("Please enter something to search!");
+        return;
+    }
+
+    
+    loadingSpinner.classList.remove('hidden');
+    issuesContainer.innerHTML = '';
+
+    try {
+        
+        const response = await fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${searchText}`);
+        const data = await response.json();
+        
+        
+        let searchResults = [];
+        if (Array.isArray(data)) {
+            searchResults = data;
+        } else if (data.data && Array.isArray(data.data)) {
+            searchResults = data.data; 
+        } else if (data.issues && Array.isArray(data.issues)) {
+            searchResults = data.issues;
+        }
+        
+        
+        allFetchedIssues = searchResults; 
+        
+        
+        displayIssues(allFetchedIssues);
+
+        
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+            btn.classList.add('text-gray-600', 'hover:bg-gray-300');
+            if(btn.getAttribute('data-category') === 'all') {
+                btn.classList.remove('text-gray-600', 'hover:bg-gray-300');
+                btn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+            }
+        });
+
+    } catch (error) {
+        console.error( error);
+    } finally {
+        loadingSpinner.classList.add('hidden');
+    }
+});
 fetchAllIssues();
